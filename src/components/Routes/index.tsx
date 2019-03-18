@@ -1,5 +1,6 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Values } from 'redux-form-website-template';
+import { Route, Switch } from 'react-router-dom';
 import Loadable from 'react-loadable';
 import Loading from '../Loading';
 
@@ -15,7 +16,7 @@ const routeInfo = [
 ];
 
 const Routes = () => {
-  return routeInfo.map((route, index) => {
+  const routePaths = routeInfo.map((route, index) => {
     const LoadableImport = Loadable({
       loader: route.routeLoad,
       loading() {
@@ -23,15 +24,15 @@ const Routes = () => {
       }
     });
     return (
-      <>
-        <Route
-          key={`routes-${index}`}
-          path={`/${route.link}`}
-          component={LoadableImport}
-        />
-      </>
+      <Route
+        key={`routes-${index}`}
+        exact
+        path={`/${route.link}`}
+        component={LoadableImport}
+      />
     );
   });
+  return <Switch>{routePaths}</Switch>;
 };
 
 export default Routes;
