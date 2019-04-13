@@ -3,6 +3,7 @@ import { Values } from 'redux-form-website-template';
 import { Route, Switch } from 'react-router-dom';
 import Loadable from 'react-loadable';
 import Loading from '../Loading';
+import UserMain from '../UserMain';
 
 const routeInfo = [
   { name: 'Home', link: '', routeLoad: () => import('../Home') },
@@ -10,6 +11,11 @@ const routeInfo = [
     name: 'Register',
     link: 'register',
     routeLoad: () => import('../Register')
+  },
+  {
+    name: 'UserMain',
+    link: 'user/:userId/home',
+    routeLoad: () => import('../UserMain')
   }
   // { name: 'Login', link: 'login', routeLoad: () => import('../Login') },
   // { name: 'Browse', link: 'players', routeLoad: () => import('../Players') }
@@ -26,7 +32,7 @@ const Routes = () => {
     return (
       <Route
         key={`routes-${index}`}
-        exact
+        exact={true}
         path={`/${route.link}`}
         component={LoadableImport}
       />
