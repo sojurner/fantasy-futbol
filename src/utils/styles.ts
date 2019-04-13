@@ -1,10 +1,12 @@
-export const formStyles = theme => ({
+import { makeStyles } from '@material-ui/styles';
+
+export const formStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1
   },
   container: {
     width: '40rem',
-    flexGrow: 1
+    margin: 'auto'
   },
   item: {
     width: 'inherit'
@@ -15,13 +17,12 @@ export const formStyles = theme => ({
   input: {
     textAlign: 'center',
     width: 'inherit',
-    color: theme.palette.text.secondary
+    color: 'black'
   },
   button: {
-    margin: 'auto',
-    flexGrow: 1
+    textAlign: 'center'
   },
   iconSmall: {
     fontSize: 20
   }
-});
+}));
