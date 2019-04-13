@@ -1,32 +1,35 @@
 import React, { useState } from 'react';
-import { registerUser } from '../../actions/user';
-import { withStyles } from '@material-ui/core/styles';
+// import { connect } from 'react-redux';
+import { registerUser } from '../../utils/apiCalls';
 import { Fab, Grid, InputAdornment, TextField } from '@material-ui/core';
 import { LockOutlined, PermIdentity, EmailOutlined } from '@material-ui/icons';
 import { formStyles } from '../../utils/styles';
 
-const Register = ({ registerUser, classes, className }) => {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+const Register = ({ className, history }) => {
+  const [fullName, setFullName] = useState('');
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+
+  const classes = formStyles();
 
   const inputList = [
     {
       className: classes.itemSmall,
       xs: 6,
-      label: 'First Name',
-      name: 'firstName',
-      value: firstName,
+      label: 'Full Name',
+      name: 'fullname',
+      value: fullName,
       type: 'text',
       icon: PermIdentity
     },
     {
       className: classes.itemSmall,
       xs: 6,
-      label: 'Last Name',
-      name: 'lastName',
-      value: lastName,
+      label: 'Username',
+      name: 'username',
+      value: username,
       type: 'text',
       icon: PermIdentity
     },
@@ -53,11 +56,11 @@ const Register = ({ registerUser, classes, className }) => {
   const handleRegistration = (event: React.FormEvent<HTMLInputElement>) => {
     const { value, name } = event.currentTarget;
     switch (name) {
-      case 'firstName':
-        setFirstName(value);
+      case 'fullname':
+        setFullName(value);
         return;
-      case 'lastName':
-        setLastName(value);
+      case 'username':
+        setUsername(value);
         return;
       case 'email':
         setEmail(value);
@@ -70,60 +73,65 @@ const Register = ({ registerUser, classes, className }) => {
     }
   };
 
-  const handleSubmit = (event: React.MouseEvent<HTMLElement>) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    console.log(email, password);
+    const newUser = { email, password, username, fullName };
+    const user = await registerUser(newUser);
+    user.status === 200
+      ? history.push(`/user/${user.id}/home`)
+      : setError('Something went Wrong');
   };
 
   return (
-    <form name="register" className={classes.root} onSubmit={handleSubmit}>
-      <Grid className={classes.container} container spacing={8}>
-        {inputList.map((field, index) => {
-          return (
-            <Grid
-              key={`input-${index}`}
-              item
-              className={field.className}
-              xs={field.xs}
+    <form
+      name="register"
+      className={classes.root}
+      onSubmit={handleSubmit.bind(event)}
+    >
+      {!error && (
+        <Grid className={classes.container} container={true} spacing={8}>
+          {inputList.map((field, index) => {
+            return (
+              <Grid key={`input-${index}`} className={field.className}>
+                <TextField
+                  className={classes.input}
+                  margin="normal"
+                  variant="outlined"
+                  label={field.label}
+                  type={field.type}
+                  name={field.name}
+                  value={field.value}
+                  onChange={handleRegistration.bind(event)}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <field.icon />
+                      </InputAdornment>
+                    )
+                  }}
+                />
+              </Grid>
+            );
+          })}
+          <Grid className={classes.button} xs={12}>
+            <Fab
+              size="medium"
+              color="primary"
+              variant="extended"
+              onClick={handleSubmit}
             >
-              <TextField
-                className={classes.input}
-                margin="normal"
-                variant="outlined"
-                label={field.label}
-                type={field.type}
-                name={field.name}
-                value={field.value}
-                onChange={handleRegistration}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <field.icon />
-                    </InputAdornment>
-                  )
-                }}
-              />
-            </Grid>
-          );
-        })}
-        <Grid item xs={12}>
-          <Fab
-            size="medium"
-            color="primary"
-            variant="extended"
-            className={classes.button}
-            onClick={handleSubmit}
-          >
-            SUBMIT
-          </Fab>
+              SUBMIT
+            </Fab>
+          </Grid>
         </Grid>
-      </Grid>
+      )}
+      {error && <h1>{error}</h1>}
     </form>
   );
 };
 
-const mapDispatchToProps = dispatch => ({
-  registerUser: registrationInfo => dispatch(registerUser(registrationInfo))
-});
+// const mapDispatchToProps = dispatch => ({
+//   registerUser: registrationInfo => dispatch(registerUser(registrationInfo))
+// });
 
-export default withStyles(formStyles)(Register);
+export default Register;
