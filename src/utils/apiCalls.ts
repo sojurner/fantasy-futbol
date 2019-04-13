@@ -14,7 +14,7 @@ export const registerUser = async userFields => {
 
   try {
     const response = await fetch(
-      'http://localhost:3000/api/v1/signup',
+      'https://fantasy-futbol-ds.herokuapp.com/api/v1/signup',
       options
     );
     return await response.json();
@@ -25,7 +25,9 @@ export const registerUser = async userFields => {
 
 export const requestPlayers = async () => {
   try {
-    const response = await fetch('http://localhost:3000/api/v1/player_stats');
+    const response = await fetch(
+      'https://fantasy-futbol-ds.herokuapp.com/api/v1/player_stats'
+    );
     return await response.json();
   } catch (error) {
     return { error };
