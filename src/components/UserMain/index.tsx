@@ -15,9 +15,7 @@ const UserMain = () => {
 
   return (
     <>
-      {playerList.map((player: any, index) => {
-        return <h3 key={`player-${index}`}>{player.Name}</h3>;
-      })}
+      <h1>Welcome</h1>
     </>
   );
 };
