@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { IconButton } from '@material-ui/core';
 import Home from '@material-ui/icons/Home';
@@ -12,19 +13,43 @@ const links = [
   { path: 'players', icon: FindInPage }
 ];
 
-const Navigation = () => {
-  const navigation = links.map((link, index) => (
-    <IconButton
-      key={`link-${index}`}
-      component={Link}
-      to={`/${link.path}`}
-      aria-owns={open ? 'menu-appbar' : undefined}
-      color="inherit"
-    >
-      <link.icon />
-    </IconButton>
-  ));
+const Navigation = ({ loggedIn }) => {
+  const navigation = links.map((link, index) => {
+    if (loggedIn) {
+      return (
+        <>
+          {link.path !== 'register' && (
+            <IconButton
+              key={`link-${index}`}
+              component={Link}
+              to={`/${link.path}`}
+              aria-owns={open ? 'menu-appbar' : undefined}
+              color="inherit"
+            >
+              <link.icon />
+            </IconButton>
+          )}
+        </>
+      );
+    } else {
+      return (
+        <IconButton
+          key={`link-${index}`}
+          component={Link}
+          to={`/${link.path}`}
+          aria-owns={open ? 'menu-appbar' : undefined}
+          color="inherit"
+        >
+          <link.icon />
+        </IconButton>
+      );
+    }
+  });
   return <>{navigation}</>;
 };
 
-export default Navigation;
+const mapStateToProps = state => ({
+  loggedIn: state.user
+});
+
+export default connect(mapStateToProps)(Navigation);
