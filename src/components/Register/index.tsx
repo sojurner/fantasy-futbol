@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
-// import { connect } from 'react-redux';
+import { connect } from 'react-redux';
 import { registerUser } from '../../utils/apiCalls';
+import { setUser } from '../../actions/user';
 import { Fab, Grid, InputAdornment, TextField } from '@material-ui/core';
 import { LockOutlined, PermIdentity, EmailOutlined } from '@material-ui/icons';
 import { formStyles } from '../../utils/styles';
 
-const Register = ({ className, history }) => {
+const Register: React.FunctionComponent<{
+  className: any;
+  history: any;
+  setUser: any;
+}> = ({ className, history, setUser }) => {
   const [fullName, setFullName] = useState('');
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -77,9 +82,13 @@ const Register = ({ className, history }) => {
     event.preventDefault();
     const newUser = { email, password, username, fullName };
     const user = await registerUser(newUser);
-    user.status === 200
-      ? history.push(`/user/${user.id}/home`)
-      : setError('Something went Wrong');
+    const { status, id, ...userInfo } = user;
+    if (status === 200) {
+      setUser(userInfo);
+      history.push(`/user/${user.id}/home`);
+    } else {
+      setError('Something went Wrong');
+    }
   };
 
   return (
@@ -130,8 +139,11 @@ const Register = ({ className, history }) => {
   );
 };
 
-// const mapDispatchToProps = dispatch => ({
-//   registerUser: registrationInfo => dispatch(registerUser(registrationInfo))
-// });
+const mapDispatchToProps = dispatch => ({
+  setUser: userInfo => dispatch(setUser(userInfo))
+});
 
-export default Register;
+export default connect(
+  null,
+  mapDispatchToProps
+)(Register);
