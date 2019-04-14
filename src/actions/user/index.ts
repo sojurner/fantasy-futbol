@@ -10,12 +10,23 @@ interface LoginProps {
   password: string;
 }
 
+interface User {
+  email: string;
+  full_name: string;
+  user_name: string;
+}
+
 export const registerUser = (userFields: RegisterProps) => ({
   type: 'REGISTER_USER',
-  action: { ...userFields }
+  payload: { ...userFields }
 });
 
 export const loginUser = (userFields: LoginProps) => ({
   type: 'LOGIN_USER',
-  action: { ...userFields }
+  payload: { ...userFields }
+});
+
+export const setUser = (user: User) => ({
+  type: 'SET_USER',
+  payload: { ...user }
 });
