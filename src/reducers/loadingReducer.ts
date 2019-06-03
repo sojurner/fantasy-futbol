@@ -1,12 +1,12 @@
 export const loadingReducer = (
-  state: boolean = false,
+  state: boolean = true,
   action: { type: string; payload: boolean }
 ) => {
   switch (action.type) {
     case 'IS_LOADING':
-      return action.payload;
+      return true;
     case 'HAS_LOADED':
-      return action.payload;
+      return false;
     default:
       return state;
   }

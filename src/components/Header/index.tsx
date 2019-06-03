@@ -6,10 +6,25 @@ import Navigation from '../Navigation';
 
 const styles = createStyles({
   root: {
-    flexGrow: 1
+    flexGrow: 1,
+    '& header': {
+      color: '#1f3073',
+      background: 'none',
+      boxShadow: 'none',
+      borderBottom: '1px solid #0000003d',
+      boxShadow: '1px 0px 1px 2px #00000017'
+    }
   },
   grow: {
-    flexGrow: 1
+    width: 'maxContent',
+    margin: 'auto auto auto 0',
+    fontFamily: 'Impact',
+    textDecorationLine: 'none',
+    '&:hover': {
+      transition: '.3s linear',
+      color: '#dcd2ff',
+      textShadow: '2px 2px darkslateblue'
+    }
   }
 });
 

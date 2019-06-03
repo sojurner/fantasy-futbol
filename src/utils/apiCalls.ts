@@ -23,10 +23,11 @@ export const registerUser = async userFields => {
   }
 };
 
-export const requestPlayers = async () => {
+export const requestPlayers = async pageNumber => {
   try {
     const response = await fetch(
-      'https://fantasy-futbol-ds.herokuapp.com/api/v1/player_stats'
+      // 'https://fantasy-futbol-ds.herokuapp.com/api/v1/player_stats'
+      `${process.env.API_URL}/api/v1/player_stats?page=${pageNumber}`
     );
     return await response.json();
   } catch (error) {
